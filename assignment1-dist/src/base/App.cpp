@@ -167,7 +167,9 @@ App::App(void)
 	shading_toggle_			(false),
 	shading_mode_changed_	(false),
 	camera_rotation_angle_	(0.0f),
-	translation_            (Mat4f())
+	translation_            (Mat4f()),
+	object_rotator_			(Mat4f()),
+	object_rotation_angle_  (0.0f)
 {
 	static_assert(is_standard_layout<Vertex>::value, "struct Vertex must be standard layout to use offsetof");
 	initRendering();
@@ -246,17 +248,55 @@ bool App::handleEvent(const Window::Event& ev) {
 		else if (ev.key == FW_KEY_END)
 			camera_rotation_angle_ += 0.05 * FW_PI;
 		else if (ev.key == FW_KEY_PAGE_DOWN)
+		{
 			translation_.setRow(0, translation_.getRow(0) - Vec4f(0, 0, 0, 0.05));
+		}
 		else if (ev.key == FW_KEY_PAGE_UP)
+		{
 			translation_.setRow(0, translation_.getRow(0) + Vec4f(0, 0, 0, 0.05));
+		}
 		else if (ev.key == FW_KEY_UP)
+		{
 			translation_.setRow(1, translation_.getRow(1) + Vec4f(0, 0, 0, 0.05));
+		}
 		else if (ev.key == FW_KEY_DOWN)
+		{
 			translation_.setRow(1, translation_.getRow(1) - Vec4f(0, 0, 0, 0.05));
+		}
 		else if (ev.key == FW_KEY_LEFT)
+		{
 			translation_.setRow(2, translation_.getRow(2) - Vec4f(0, 0, 0, 0.05));
+		}
 		else if (ev.key == FW_KEY_RIGHT)
+		{
 			translation_.setRow(2, translation_.getRow(2) + Vec4f(0, 0, 0, 0.05));
+		}
+		else if (ev.key == FW_KEY_X)
+		{
+			translation_.setRow(0, translation_.getRow(0) + Vec4f(0.05, 0, 0, 0)); // Scale up along the x-axis
+		}
+		else if (ev.key == FW_KEY_Z)
+		{
+			translation_.setRow(0, translation_.getRow(0) - Vec4f(0.05, 0, 0, 0)); // Scale down along the x-axis
+		}
+		else if (ev.key == FW_KEY_Y)
+		{
+			object_rotation_angle_ -= 0.05 * FW_PI;
+			Mat3f rot = Mat3f::rotation(Vec3f(0, 1, 0), object_rotation_angle_);
+			object_rotator_.setCol(0, Vec4f(rot.getCol(0), 0));
+			object_rotator_.setCol(1, Vec4f(rot.getCol(1), 0));
+			object_rotator_.setCol(2, Vec4f(rot.getCol(2), 0));
+			object_rotator_.setCol(3, Vec4f(0, 0, 0, 1));
+		}
+		else if (ev.key == FW_KEY_U)
+		{
+			object_rotation_angle_ += 0.05 * FW_PI;
+			Mat3f rot = Mat3f::rotation(Vec3f(0, 1, 0), object_rotation_angle_);
+			object_rotator_.setCol(0, Vec4f(rot.getCol(0), 0));
+			object_rotator_.setCol(1, Vec4f(rot.getCol(1), 0));
+			object_rotator_.setCol(2, Vec4f(rot.getCol(2), 0));
+			object_rotator_.setCol(3, Vec4f(0, 0, 0, 1));
+		}
 	}
 	
 	if (ev.type == Window::EventType_KeyUp) {
@@ -343,7 +383,8 @@ void App::initRendering() {
 		void main()
 		{
 			// EXTRA: oops, someone forgot to transform normals here...
-			float clampedCosine = clamp(dot(aNormal, directionToLight), 0.0, 1.0);
+			mat3 transformer = transpose(inverse(mat3(uWorldToClip * uModelToWorld)));
+			float clampedCosine = clamp(dot(transformer * aNormal, directionToLight), 0.0, 1.0);
 			vec3 litColor = vec3(clampedCosine);
 			vec3 generatedColor = distinctColors[gl_VertexID % 6];
 			// gl_Position is a built-in output variable that marks the final position
@@ -415,7 +456,7 @@ void App::render() {
 	
 	// YOUR CODE HERE (R1)
 	// Set the model space -> world space transform to translate the model according to user input.
-	Mat4f modelToWorld = translation_;
+	Mat4f modelToWorld = object_rotator_ * translation_;
 
 	
 	// Draw the model with your model-to-world transformation.

@@ -67,7 +67,8 @@ private:
 	// YOUR CODE HERE (R1)
 	// Add a class member to store the current translation.
 	Mat4f				translation_;
-
+	Mat4f				object_rotator_;
+	float				object_rotation_angle_;
 	// EXTRA:
 	// For animation extra credit you can use the framework's Timer class.
 	// The .start() and .unstart() methods start and stop the timer; when it's
