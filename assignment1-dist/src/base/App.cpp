@@ -149,7 +149,7 @@ vector<Vertex> loadUserGeneratedModel() {
 		v1.position = Vec3f(FW::cos(angle_increment * (i + 1)) * radius, -height, FW::sin(angle_increment * (i + 1)) * radius);
 		v2.position = Vec3f(0, 0, 0);
 
-		Vec3f norm = FW::cross(v0.position, v1.position).normalized();
+		Vec3f norm = FW::cross(v1.position, v0.position).normalized();
 
 		v0.normal = norm; v1.normal = norm; v2.normal = norm;
 
@@ -162,7 +162,7 @@ vector<Vertex> loadUserGeneratedModel() {
 
 App::App(void)
 :   common_ctrl_			(CommonControls::Feature_Default & ~CommonControls::Feature_RepaintOnF5),
-	current_model_			(MODEL_FROM_FILE), //MODEL_EXAMPLE gives R1, USER_GENERATED gives R2, MODEL_FROM_INDEXED_DATA gives R3
+	current_model_			(MODEL_USER_GENERATED), //MODEL_EXAMPLE gives R1, MODEL_USER_GENERATED gives R2, MODEL_FROM_INDEXED_DATA gives R3
 	model_changed_			(true),
 	shading_toggle_			(false),
 	shading_mode_changed_	(false),
