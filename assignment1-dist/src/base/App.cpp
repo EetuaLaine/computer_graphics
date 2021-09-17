@@ -162,7 +162,7 @@ vector<Vertex> loadUserGeneratedModel() {
 
 App::App(void)
 :   common_ctrl_			(CommonControls::Feature_Default & ~CommonControls::Feature_RepaintOnF5),
-	current_model_			(MODEL_FROM_INDEXED_DATA), //MODEL_EXAMPLE gives R1, USER_GENERATED gives R2
+	current_model_			(MODEL_FROM_FILE), //MODEL_EXAMPLE gives R1, USER_GENERATED gives R2, MODEL_FROM_INDEXED_DATA gives R3
 	model_changed_			(true),
 	shading_toggle_			(false),
 	shading_mode_changed_	(false),
@@ -472,9 +472,21 @@ vector<Vertex> App::loadObjFileModel(string filename) {
 			// Read the three vertex coordinates (x, y, z) into 'v'.
 			// Store a copy of 'v' in 'positions'.
 			// See std::vector documentation for push_back.
+			for (int i = 0; i < 3; i++) {
+				iss >> s;
+				float coord = std::stof(s);
+				v[i] = coord;
+			}
+			positions.push_back(v);
 		} else if (s == "vn") { // normal
 			// YOUR CODE HERE (R4)
 			// Similar to above.
+			for (int i = 0; i < 3; i++) {
+				iss >> s;
+				float coord = std::stof(s);
+				v[i] = coord;
+			}
+			normals.push_back(v);
 		} else if (s == "f") { // face
 			// YOUR CODE HERE (R4)
 			// Read the indices representing a face and store it in 'faces'.
@@ -488,7 +500,17 @@ vector<Vertex> App::loadObjFileModel(string filename) {
 			// the texture indices by reading them into a temporary variable.
 
 			unsigned sink; // Temporary variable for reading the unused texture indices.
-
+			unsigned idx;
+			for (int i = 0; i < 3; i++) {
+				iss >> s;
+				idx = std::stoi(s) - 1;
+				f[i*2] = idx;
+				iss >> s;
+				iss >> s;
+				idx = std::stoi(s) - 1;
+				f[i*2 + 1] = idx;
+			}
+			faces.push_back(f);
 			// Note that in C++ we index things starting from 0, but face indices in OBJ format start from 1.
 			// If you don't adjust for that, you'll index past the range of your vectors and get a crash.
 
