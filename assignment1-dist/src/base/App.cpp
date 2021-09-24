@@ -299,7 +299,7 @@ bool App::handleEvent(const Window::Event& ev) {
 		}
 		else if (ev.key == FW_KEY_Y)
 		{
-			object_rotation_angle_ = -0.05 * FW_PI;
+			object_rotation_angle_ += -0.05 * FW_PI;
 			Mat3f rot = Mat3f::rotation(Vec3f(0, 1, 0), object_rotation_angle_);
 			object_rotator_.setCol(0, Vec4f(rot.getCol(0), 0));
 			object_rotator_.setCol(1, Vec4f(rot.getCol(1), 0));
@@ -308,7 +308,7 @@ bool App::handleEvent(const Window::Event& ev) {
 		}
 		else if (ev.key == FW_KEY_U)
 		{
-			object_rotation_angle_ = 0.05 * FW_PI;
+			object_rotation_angle_ += 0.05 * FW_PI;
 			Mat3f rot = Mat3f::rotation(Vec3f(0, 1, 0), object_rotation_angle_);
 			object_rotator_.setCol(0, Vec4f(rot.getCol(0), 0));
 			object_rotator_.setCol(1, Vec4f(rot.getCol(1), 0));

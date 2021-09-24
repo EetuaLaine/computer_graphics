@@ -3,40 +3,55 @@
 #
 # Assignment 1: Introduction
 
-Student name:
-Student number:
-Hours spent on requirements (approx.):
-Hours spent on extra credit (approx.):
+Student name: Eetu Laine
+Student number: 587549
+Hours spent on requirements (approx.): ~8-10
+Hours spent on extra credit (approx.): ~12-14
 
 # First, some questions about where you come from and how you got started.
 # Your answers in this section will be used to improve the course.
 # They will not be judged or affect your points, but please answer all of them.
 # Keep it short; answering shouldn't take you more than 5-10 minutes.
 
-- What are you studying here at Aalto? (Department, major, minor...?)
+- What are you studying here at Aalto? (Department, major, minor...?) 
+Computer Science major, master's degree. 
 
-- Which year of your studies is this?
+- Which year of your studies is this? 
+6th and final if things go according to plan. 
 
-- Is this a mandatory course for you?
+- Is this a mandatory course for you? 
+Yes. 
 
-- Have you had something to do with graphics before? Other studies, personal interests, work?
+- Have you had something to do with graphics before? Other studies, personal interests, work? 
+No.
 
-- Do you remember basic linear algebra? Matrix and vector multiplication, cross product, that sort of thing?
+- Do you remember basic linear algebra? Matrix and vector multiplication, cross product, that sort of thing? 
+Yes. 
 
-- How is your overall programming experience? What language are you most comfortable with?
+- How is your overall programming experience? What language are you most comfortable with? 
+Most comfortable with Python, but also got some experience with C++, Scala. Overall 5 years of experience. 
 
 - Do you have some experience with these things? (If not, do you have experience with something similar such as C or Direct3D?)
-C++:
-C++11:
-OpenGL:
+C++: Yes.
+C++11: Yes I think. 
+OpenGL: No. 
 
 - Have you used a version control system such as Git, Mercurial or Subversion? Which ones?
 
+I have used Git. 
+
 - Did you go to the technology lecture?
+
+No lectures this year. 
 
 - Did you go to exercise sessions?
 
+No. 
+
 - Did you work on the assignment using Aalto computers, your own computers, or both?
+
+I used my own machine and Visual Studio 2019 Community. 
+My computer has an RTX 2060 GPU so performance-wise the code might actually not be as good as it should. 
 
 # Which parts of the assignment did you complete? Mark them 'done'.
 # You can also mark non-completed parts as 'attempted' if you spent a fair amount of
@@ -46,14 +61,16 @@ OpenGL:
 (Try to get everything done! Based on previous data, virtually everyone who put in the work and did well in the first two assignments ended up finishing the course, and also reported a high level of satisfaction at the end of the course.)
 
                             opened this file (0p): done
-                         R1 Moving an object (1p): not done
-R2 Generating a simple cone mesh and normals (3p): not done
-  R3 Converting mesh data for OpenGL viewing (3p): not done
-           R4 Loading a large mesh from file (3p): not done
+                         R1 Moving an object (1p): done
+R2 Generating a simple cone mesh and normals (3p): done
+  R3 Converting mesh data for OpenGL viewing (3p): done
+           R4 Loading a large mesh from file (3p): done
 
 # Did you do any extra credit work?
 
 (Describe what you did and, if there was a substantial amount of work involved, how you did it. Also describe how to use/activate your extra features, if they are interactive.)
+
+
 
 # Are there any known problems/bugs remaining in your code?
 
