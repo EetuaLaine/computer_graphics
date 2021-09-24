@@ -20,7 +20,7 @@ struct glGeneratedIndices
 	GLuint static_vao, dynamic_vao;
 	GLuint shader_program;
 	GLuint static_vertex_buffer, dynamic_vertex_buffer;
-	GLuint model_to_world_uniform, world_to_clip_uniform, shading_toggle_uniform;
+	GLuint model_to_world_uniform, world_to_clip_uniform, shading_toggle_uniform, normal_transform_uniform;
 };
 
 class App : public Window::Listener
@@ -31,7 +31,8 @@ private:
 		MODEL_EXAMPLE,
 		MODEL_USER_GENERATED,
 		MODEL_FROM_INDEXED_DATA,
-		MODEL_FROM_FILE
+		MODEL_FROM_FILE,
+		MODEL_FROM_PLY_FILE
 	};
 
 public:
@@ -47,6 +48,8 @@ private:
 	void				initRendering();
 	void				render();
 	std::vector<Vertex>	loadObjFileModel(std::string filename);
+
+	std::vector<Vertex> loadPLYFileModel(std::string filename);
 
 	void				streamGeometry(const std::vector<Vertex>& vertices);
 
@@ -69,6 +72,9 @@ private:
 	Mat4f				translation_;
 	Mat4f				object_rotator_;
 	float				object_rotation_angle_;
+	Vec2i				mouse_delta_;
+	float				camera_distance_;
+	bool				key_pressed_;
 	// EXTRA:
 	// For animation extra credit you can use the framework's Timer class.
 	// The .start() and .unstart() methods start and stop the timer; when it's
