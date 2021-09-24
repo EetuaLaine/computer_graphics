@@ -70,17 +70,28 @@ R2 Generating a simple cone mesh and normals (3p): done
 
 (Describe what you did and, if there was a substantial amount of work involved, how you did it. Also describe how to use/activate your extra features, if they are interactive.)
 
-
+I did version control, made a git repo for the course. I implemented scaling along the x axis with x and z keys, 
+object rotation along y axis using y and u keys, fixed the shading (I think), Implemented mouse controls for the camera. The camera
+rotates along the y axis when dragging the mouse horizontally, and zooms in and out when dragging the mouse vertically. 
+I implemented the automatic rotation when pressing r, and also the viewport correction. I also implemented my own version of the perspective
+scaling, and commented out the easy viewport correction. My interpretation of the assignment was to scale down the larger side of the window
+based on the ratio of the smaller and larger side. That way stretching the window along one side does not distort the object. I also tried
+to implement loading PLY files, but it did not seem to work correctly so I commented it out. 
 
 # Are there any known problems/bugs remaining in your code?
 
 (Please provide a list of the problems. If possible, describe what you think the cause is, how you have attempted to diagnose or fix the problem, and how you would attempt to diagnose or fix it if you had more time or motivation. This is important: we are more likely to assign partial credit if you help us understand what's going on.)
 
+The PLY loading does not work correctly, it produces weird looking spherical objects and the faces do not seem to align. I think it's just due to faulty handling of binary data. 
+
 # Did you collaborate with anyone in the class?
 
 (Did you help others? Did others help you? Let us know who you talked to, and what sort of help you gave or received.)
+
+I did not really interact with others during this round. 
 
 # Any other comments you'd like to share about the assignment or the course so far?
 
 (Was the assignment too long? Too hard? Fun or boring? Did you learn something, or was it a total waste of time? Can we do something differently to help you learn? Please be brutally honest; we won't take it personally.)
 
+I found the exercise to be pretty fun and interesting to do. 
