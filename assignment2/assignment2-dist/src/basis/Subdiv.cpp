@@ -190,9 +190,47 @@ void MeshWithConnectivity::LoopSubdivision() {
 					// Be sure to see section 3.2 in the handout for an in depth explanation of the neighbor index tables; the scheme is somewhat involved.
 					Vec3f pos, col, norm;
 					// This default implementation just puts the new vertex at the edge midpoint.
-					pos = 0.5f * (positions[v0] + positions[v1]);
-					col = 0.5f * (colors[v0] + colors[v1]);
-					norm = 0.5f * (normals[v0] + normals[v1]);
+					int neighbor_triangle = neighborTris[i][j];
+
+					// neighbor_vertex is the vertex index of the target vertex in the neighbor triangle (0 to 2).
+					int neighbor_edge = neighborEdges[i][j];
+
+					int neighbor_vertex = (neighbor_edge + 2) % 3;
+
+					// Vertex index of the relevant vertex at the side of the current triangle.
+					int this_triangle_vertex = (j + 2) % 3;
+
+					// 3/8 weight for these.
+					Vec3f p0 = positions[v0];
+					Vec3f p1 = positions[v1];
+
+					int this_vertex = indices[i][this_triangle_vertex];
+					int neighbor_vertex_index;
+					Vec3f p2;
+					Vec3f c2;
+					Vec3f n2;
+					float neighbor_weight;
+
+					// 1/8 weight for these.
+					if (neighbor_triangle != -1 && neighbor_edge != -1) {
+						neighbor_vertex_index = indices[neighbor_triangle][neighbor_vertex];
+						p2 = positions[neighbor_vertex_index];
+						c2 = colors[neighbor_vertex_index];
+						n2 = normals[neighbor_vertex_index];
+						neighbor_weight = (1.0f / 8);
+					}
+					else {
+						p2 = Vec3f(0.0f, 0.0f, 0.0f);
+						c2 = Vec3f(0.0f, 0.0f, 0.0f);
+						n2 = Vec3f(0.0f, 0.0f, 0.0f);
+						neighbor_weight = (2.0f / 8);
+					}
+
+					Vec3f p3 = positions[this_vertex];
+
+					pos = (3.0f / 8) * (p0 + p1) + neighbor_weight * (p2 + p3);
+					col = (3.0f / 8) * (colors[v0] + colors[v1]) + neighbor_weight * (c2 + colors[this_vertex]);
+					norm = (3.0f / 8) * (normals[v0] + normals[v1]) + neighbor_weight * (n2 + normals[this_vertex]);
 
 				new_positions.push_back(pos);
 				new_colors.push_back(col);
@@ -229,6 +267,8 @@ void MeshWithConnectivity::LoopSubdivision() {
 			Vec3f pos, col, norm;
 			// YOUR CODE HERE (R5): reposition the old vertices
 
+			// TODO: GO AROUND THE NEIGHBOR TRIANGLES LIKE A CAROUSEL UNTIL GETTING BACK TO THE ORIGINAL ONE
+
 			// This default implementation just passes the data through unchanged.
 			// You need to replace these three lines with the loop over the 1-ring
 			// around vertex v0, and compute the new position as a weighted average
@@ -241,9 +281,65 @@ void MeshWithConnectivity::LoopSubdivision() {
 			// vertices with a visible color, so you can ensure that the 1-ring generated is correct.
 			// The solution exe implements this so you can see an example of what you can do with the
 			// highlight mode there.
-			pos = positions[v0];
-			col = colors[v0];
-			norm = normals[v0];
+
+			int anchor_point = indices[i][(j + 1) % 3];
+			int v1 = -2;
+			float B = 3.0f / 16;
+			std::vector<Vec3f> neighbor_positions;
+			std::vector<Vec3f> neighbor_colors;
+			std::vector<Vec3f> neighbor_normals;
+			Vec3f p1 = positions[v0];
+			Vec3f c1 = colors[v0];
+			Vec3f n1 = normals[v0];
+
+			v1 = indices[i][(j + 1) % 3];
+
+			neighbor_positions.push_back(positions[v1]);
+			neighbor_colors.push_back(colors[v1]);
+			neighbor_normals.push_back(normals[v1]);
+
+			int border_edge = (j + 2) % 3;
+			int current_triangle = neighborTris[i][border_edge];
+			int current_edge = neighborEdges[i][border_edge];
+
+
+			while (current_edge != -1 && current_triangle != -1 && current_triangle != i) {
+				v1 = indices[current_triangle][(current_edge + 1) % 3];
+				neighbor_positions.push_back(positions[v1]);
+				neighbor_colors.push_back(colors[v1]);
+				neighbor_normals.push_back(normals[v1]);
+				border_edge = (current_edge + 2) % 3;
+				current_edge = neighborEdges[current_triangle][border_edge];
+				current_triangle = neighborTris[current_triangle][border_edge];
+			}
+
+
+			if (current_triangle == i) 
+			{
+				int n = neighbor_positions.size();
+				if (n > 3)
+					B = 3 / (8.0f * n);
+
+				for (int k = 0; k < n; k++)
+				{
+					pos += neighbor_positions[k];
+					col += neighbor_colors[k];
+					norm += neighbor_colors[k];
+				}
+				pos *= B;
+				col *= B;
+				norm *= B;
+
+				pos += (1 - n * B) * p1;
+				col += (1 - n * B) * c1;
+				norm += (1 - n * B) * n1;
+			}
+			else 
+			{
+				pos = positions[v0];
+				col = colors[v0];
+				norm = normals[v0];
+			}
 
 
 			// Stop here if we're doing the debug pass since we don't actually need to modify the mesh
